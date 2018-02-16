@@ -11,7 +11,7 @@ class JiraClient:
         self.username = username
         self.password = password
 
-    def allocate_work(self, task_id, date, hours):
+    def allocate_work(self, task_id, date, hours, comment):
         def allocation_call(authorization_header):
             timezone = pytz.timezone("Europe/Warsaw")
             tz_aware = timezone.localize(date)
@@ -19,7 +19,8 @@ class JiraClient:
             prepared_date = "%s%s" % (dt, tz_aware.strftime('%z'))
             body = {
                 "started": prepared_date,
-                "timeSpentSeconds": int(hours * 60 * 60)
+                "timeSpentSeconds": int(hours * 60 * 60),
+                "comment": comment
             }
             response = requests.post(self.url + '/api/2/issue/{}/worklog'.format(task_id.upper()), json=body, headers=authorization_header)
             status_code = response.status_code

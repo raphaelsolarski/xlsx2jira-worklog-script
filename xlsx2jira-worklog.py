@@ -35,5 +35,5 @@ else:
     for row in rows_to_allocate:
         print("Allocating task: {} on date: {} from row: {}"
               .format(row.task_id, row.date, row.row_num), flush=True, end='')
-        client.allocate_work(row.task_id, row.date, row.hours)
+        client.allocate_work(row.task_id, row.date, row.hours, row.comment)
         print(" - OK")
