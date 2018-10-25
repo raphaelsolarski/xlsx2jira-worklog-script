@@ -1,5 +1,6 @@
 {
   "url": "https://externalhttpuser:externalhttppassword@company.com/jira/rest",
   "username": "ldapUser",
-  "password": "ladpPassword"
+  "password": "ladpPassword",
+  "logging_hour": 9
 }
