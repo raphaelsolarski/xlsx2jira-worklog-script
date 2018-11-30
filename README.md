@@ -1,5 +1,10 @@
 # xlsx2jira-worklog-script
 
+#### Install dependencies
+```bash
+pip3 install -r requirements.txt
+```
+
 #### Prepare config.json file with connection configuration
 
 ```json
