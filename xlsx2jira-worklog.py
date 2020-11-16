@@ -20,9 +20,12 @@ parser = AllocationParser()
 validator = AllocationValidator()
 client = JiraClient(
     url=config['url'],
-    username=config['username'],
-    password=config['password'],
-    logger=logging)
+    username=config.get('username'),
+    password=config.get('password'),
+    cookie=config.get('cookie'),
+    cert=config.get('cert'),
+    logger=logging
+)
 
 logging_datetime_delta = timedelta(hours=config['logging_hour'])
 all_rows = parser.parse_input_file(input_file_name)

@@ -18,8 +18,6 @@ class AllocationValidator:
             row_errors.append(self.field_lack_error_msg("task id", row_num))
         if row.hours is None:
             row_errors.append(self.field_lack_error_msg("hours", row_num))
-        if row.project is None:
-            row_errors.append(self.field_lack_error_msg("project", row_num))
         return row_errors
 
     @staticmethod
