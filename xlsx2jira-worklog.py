@@ -3,8 +3,8 @@ import logging
 import sys
 from datetime import timedelta
 
-import allocation_validator
-import workload_parser
+import worklog_parser
+import worklog_validator
 from JiraClient import JiraClient
 
 if len(sys.argv) != 2:
@@ -26,9 +26,9 @@ client = JiraClient(
 )
 
 logging_datetime_delta = timedelta(hours=config['logging_hour'])
-all_rows = workload_parser.parse_input_file(input_file_name)
+all_rows = worklog_parser.parse_input_file(input_file_name)
 rows_to_allocate = list(filter(lambda r: not r.in_jira, all_rows))
-errors = allocation_validator.validate(rows_to_allocate)
+errors = worklog_validator.validate(rows_to_allocate)
 
 if errors:
     for error in errors:
