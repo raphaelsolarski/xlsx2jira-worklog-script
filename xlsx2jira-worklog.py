@@ -1,11 +1,11 @@
 import json
 import logging
+import sys
 from datetime import timedelta
 
-from AllocationParser import AllocationParser
-from AllocationValidator import AllocationValidator
+import allocation_validator
+import workload_parser
 from JiraClient import JiraClient
-import sys
 
 if len(sys.argv) != 2:
     print('Usage: python3 xlsx2jira-worklog.py <path-to-xlsx-file-with-allocation>')
@@ -16,8 +16,6 @@ input_file_name = str(sys.argv[1])
 with open('config.json', mode='rt', encoding='utf-8') as fd:
     config = json.load(fd)
 
-parser = AllocationParser()
-validator = AllocationValidator()
 client = JiraClient(
     url=config['url'],
     username=config.get('username'),
@@ -28,9 +26,9 @@ client = JiraClient(
 )
 
 logging_datetime_delta = timedelta(hours=config['logging_hour'])
-all_rows = parser.parse_input_file(input_file_name)
+all_rows = workload_parser.parse_input_file(input_file_name)
 rows_to_allocate = list(filter(lambda r: not r.in_jira, all_rows))
-errors = validator.validate_allocation(rows_to_allocate)
+errors = allocation_validator.validate(rows_to_allocate)
 
 if errors:
     for error in errors:

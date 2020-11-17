@@ -16,7 +16,11 @@ pip3 install -r requirements.txt
 ```
 
 #### Run script: 
-
-```
+```bash
 python3 xlsx2jira-worklog.py worklog.xlsx
+```
+
+#### Tests
+```bash
+python -m unittest
 ```

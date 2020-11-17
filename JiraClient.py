@@ -1,8 +1,6 @@
 import pytz
 import requests
 
-from JiraClientException import JiraClientException
-
 
 class JiraClient:
     def __init__(self, url, username, password, cookie, cert, logger):
@@ -65,3 +63,8 @@ class JiraClient:
             status_code = session_response.status_code
             self.logger.error('Error while receiving session: {}'.format(msg))
             raise JiraClientException('Status code: {} \nresponse: \n{}'.format(status_code, msg))
+
+
+class JiraClientException(Exception):
+    def __init__(self, *args):
+        super().__init__(*args)

@@ -1,4 +1,4 @@
-class AllocationRecord:
+class WorklogRecord:
     def __init__(self, row_num, date, task_id, hours, in_jira, comment):
         self.row_num = row_num
         self.date = date
