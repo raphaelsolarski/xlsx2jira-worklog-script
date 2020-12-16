@@ -27,20 +27,20 @@ class JiraClient:
                 "timeSpentSeconds": int(hours * 60 * 60),
                 "comment": comment
             }
-            response = requests.post('{}/api/2/issue/{}/worklog'.format(self.url, task_id.upper()), json=body,
+            response = requests.post(f'{self.url}/api/2/issue/{task_id.upper()}/worklog', json=body,
                                      headers=authorization_header, cert=self.cert)
             status_code = response.status_code
             if status_code != 201:
                 msg = response
-                self.logger.error('Error while logging work: {}'.format(msg))
-                raise JiraClientException('Status code: {} \nresponse: \n{}'.format(status_code, msg))
+                self.logger.error(f'Error while logging work: {msg}')
+                raise JiraClientException(f'Status code: {status_code} \nresponse: \n{msg}')
 
         self._with_authorization(allocation_call)
 
     def find_worklog_for_issue(self, task_id):
         def call(authorization_header):
             body = {}
-            response = requests.get('{}/api/2/issue/{}/worklog'.format(self.url, task_id), json=body,
+            response = requests.get(f'{self.url}/api/2/issue/{task_id}/worklog', json=body,
                                     headers=authorization_header, cert=self.cert)
             return response.json()
 
@@ -52,17 +52,17 @@ class JiraClient:
 
     def _get_or_create_session_based_authorization_header(self):
         credentials = {"username": self.username, "password": self.password}
-        session_response = requests.post('{}/auth/1/session'.format(self.url), json=credentials, cert=self.cert)
+        session_response = requests.post(f'{self.url}/auth/1/session', json=credentials, cert=self.cert)
         if session_response.status_code == 200:
             session_info_json = session_response.json()
             j_session = session_info_json['session']['value']
-            self.logger.debug('Recieved session (JSESSION={})'.format(j_session))
-            return {"cookie": "JSESSIONID={}".format(j_session)}
+            self.logger.debug(f'Recieved session (JSESSION={j_session})')
+            return {"cookie": f"JSESSIONID={j_session}"}
         else:
             msg = session_response.text
             status_code = session_response.status_code
-            self.logger.error('Error while receiving session: {}'.format(msg))
-            raise JiraClientException('Status code: {} \nresponse: \n{}'.format(status_code, msg))
+            self.logger.error(f'Error while receiving session: {msg}')
+            raise JiraClientException(f'Status code: {status_code} \nresponse: \n{msg}')
 
 
 class JiraClientException(Exception):
