@@ -2,3 +2,6 @@
 config.json
 __pycache__
 venv
+*.iml
+reports
+.DS_Store

@@ -3,18 +3,21 @@ import requests
 
 
 class JiraClient:
-    def __init__(self, url, username, password, cookie, cert, logger):
+    def __init__(self, url, username, password, api_token, cookie, cert, logger):
         self.logger = logger
         self.url = url
         self.username = username
         self.password = password
+        self.api_token = api_token
         self.cert = cert
         if cookie:
             self.authorization_header_factory = lambda: {"cookie": cookie}
+        elif api_token:
+            self.authorization_header_factory = self._get_api_token_authorization_header
         elif username and password:
             self.authorization_header_factory = self._get_or_create_session_based_authorization_header
         else:
-            raise Exception("Cookie or user/password must be specified")
+            raise Exception("Cookie, api_token, or username+password must be specified")
 
     def allocate_work(self, task_id, date, hours, comment):
         def allocation_call(authorization_header):
@@ -63,6 +66,11 @@ class JiraClient:
             status_code = session_response.status_code
             self.logger.error(f'Error while receiving session: {msg}')
             raise JiraClientException(f'Status code: {status_code} \nresponse: \n{msg}')
+
+    def _get_api_token_authorization_header(self):
+        headers = {"Authorization": f"Bearer {self.api_token}"}
+        self.logger.debug(f'Using API token with Bearer Authentication: {headers}')
+        return headers
 
 
 class JiraClientException(Exception):

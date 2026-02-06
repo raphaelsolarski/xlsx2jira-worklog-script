@@ -20,6 +20,7 @@ client = JiraClient(
     url=config['url'],
     username=config.get('username'),
     password=config.get('password'),
+    api_token=config.get('api_token'),
     cookie=config.get('cookie'),
     cert=config.get('cert'),
     logger=logging
